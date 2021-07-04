@@ -1,9 +1,20 @@
+/*
+* Track location widget aids in the tracking and geolocation of delivery drivers during jobs.
+* It also allows background location tracking. All location coordinates are store on Firestore 
+* 1) Upon pressing the 'Start Trip' button, location information is printed on screen and sent to firebase every minute
+* 2) Location updates continue to persist even if the app is in the background
+* 3) Pressing the 'Stop Trip' button stops the location tracking service.
+*
+* @author  Joshua Lim
+* @version 1.0
+* @since   04-07-2021
+*/
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:background_location/background_location.dart';
-
 
 class TrackLocation extends StatefulWidget {
   @override
@@ -70,7 +81,7 @@ class _TrackLocationState extends State<TrackLocation> {
     } 
 
     //Used background_location to create a background location routine https://pub.dev/packages/background_location/versions/0.5.0
-    BackgroundLocation.setAndroidConfiguration(60000);
+    BackgroundLocation.setAndroidConfiguration(60000); //Only for android.
     await BackgroundLocation.startLocationService();
     //BackgroundLocation doesnt fire periodically on iOS for some reason, used Timer.periodic as a workaround to fire 
     BackgroundLocation.getLocationUpdates((location) {
@@ -84,8 +95,8 @@ class _TrackLocationState extends State<TrackLocation> {
           double minutesElapsed = count / 3; //get total number of minutes which has elapsed
           Position p = await Geolocator.getCurrentPosition(); //get current geo position
 
-          print(p.latitude); //print lat long
-          print(p.longitude);
+          print('Lat: '+p.latitude.toString()); //print lat long
+          print('Lat: '+p.longitude.toString());
           String m = minutesElapsed.toInt().toString() + ' minute has elapsed - Lat: '+p.latitude.toString() + ', Lng: '+p.longitude.toString();
           setState(() {
             messages.add(Text(m)); // push log message into list
@@ -98,7 +109,6 @@ class _TrackLocationState extends State<TrackLocation> {
             'lng': p.longitude,
             'timestamp': DateTime.now().millisecondsSinceEpoch
           });
-
         }
       });
     });
