@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "142626500768",
+    "project_id": "flutter-geolocation-734d8",
+    "storage_bucket": "flutter-geolocation-734d8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:142626500768:android:26c5b1345d7e0e60cf59c5",
+        "android_client_info": {
+          "package_name": "com.example.location_tracking_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "142626500768-f0lpdk1gl2ntkv3j6hmdjlkdgc7rv5nm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRTQ-9g3lhKd5cSPcQgNb0MGUmQNJITQs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "142626500768-f0lpdk1gl2ntkv3j6hmdjlkdgc7rv5nm.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "142626500768-ahiu69p4geipjb3g3ha1hdtrh2gtjs92.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.locationTrackingFlutter"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

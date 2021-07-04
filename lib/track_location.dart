@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:background_location/background_location.dart';
 
 
 class TrackLocation extends StatefulWidget {
@@ -25,16 +26,34 @@ class _TrackLocationState extends State<TrackLocation> {
           children: [
             SizedBox(height: 30),
             TextButton(
-              onPressed: start, child: Text('Start Trip')
+              onPressed: start2, child: Text('Start Trip')
             ),
             SizedBox(height: 20),
             TextButton(
-              onPressed: stop, child: Text('End Trip')
+              onPressed: stop2, child: Text('End Trip')
             ),
           ],
         ),
       )
     );
+  }
+
+  void start2() async {
+    print('hello');
+    int count = 0;
+    BackgroundLocation.setAndroidConfiguration(5000);
+    await BackgroundLocation.startLocationService();
+    BackgroundLocation.getLocationUpdates((location) {
+      count++;
+      print("Getting location... count: "+ count.toString());
+      print(location.latitude);
+      print(location.longitude);
+    });
+  }
+
+  void stop2() {
+    BackgroundLocation.stopLocationService();
+    print('stop tracking!');
   }
 
   void start() async {
