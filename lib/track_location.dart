@@ -22,33 +22,27 @@ class TrackLocation extends StatefulWidget {
 }
 
 class _TrackLocationState extends State<TrackLocation> {
-  var timer; 
+  var timer;
   List<Widget> messages = [];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Flutter Location Tracking'),
-      ),
-      body: ListView(
+        appBar: AppBar(
+          title: Text('Flutter Location Tracking'),
+        ),
+        body: ListView(
           reverse: true,
           children: [
             SizedBox(height: 30),
-            TextButton(
-              onPressed: start, child: Text('Start Trip')
-            ),
+            TextButton(onPressed: start, child: Text('Start Trip')),
             SizedBox(height: 20),
-            TextButton(
-              onPressed: stop, child: Text('End Trip')
-            ),
-
+            TextButton(onPressed: stop, child: Text('End Trip')),
             Column(
               children: messages,
             )
           ],
-      )
-    );
+        ));
   }
 
   /*
@@ -75,42 +69,62 @@ class _TrackLocationState extends State<TrackLocation> {
       }
     }
     if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately. 
+      // Permissions are denied forever, handle appropriately.
       return Future.error(
-        'Location permissions are permanently denied, we cannot request permissions.');
-    } 
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
 
     //Used background_location to create a background location routine https://pub.dev/packages/background_location/versions/0.5.0
     BackgroundLocation.setAndroidConfiguration(60000); //Only for android.
     await BackgroundLocation.startLocationService();
-    //BackgroundLocation doesnt fire periodically on iOS for some reason, used Timer.periodic as a workaround to fire 
+    //BackgroundLocation doesnt fire periodically on iOS for some reason, used Timer.periodic as a workaround to fire
+
     BackgroundLocation.getLocationUpdates((location) {
+      count++;
       print('in background location');
-      timer = Timer.periodic(Duration(seconds: 60), (timer) async { 
+      print('latitude: ' + location.latitude.toString());
+      print('longitude: ' + location.longitude.toString());
+      String m = count.toString() +
+          ' - Lat: ' +
+          location.latitude.toString() +
+          ', Lng: ' +
+          location.longitude.toString();
+      setState(() {
+        messages.add(Text(m)); // push log message into list
+      });
+/*       timer = Timer.periodic(Duration(seconds: 60), (timer) async {
+        
         count++;
         //hacky, not sure why callback executes 3 times upon timer tick
-        if(count % 3 == 0) {
-          print("Getting location... count: "+ count.toString());
+        if (count % 3 == 0) {
+          print("Getting location... count: " + count.toString());
 
-          double minutesElapsed = count / 3; //get total number of minutes which has elapsed
-          Position p = await Geolocator.getCurrentPosition(); //get current geo position
+          double minutesElapsed =
+              count / 3; //get total number of minutes which has elapsed
+          Position p =
+              await Geolocator.getCurrentPosition(); //get current geo position
 
-          print('Lat: '+p.latitude.toString()); //print lat long
-          print('Lat: '+p.longitude.toString());
-          String m = minutesElapsed.toInt().toString() + ' minute has elapsed - Lat: '+p.latitude.toString() + ', Lng: '+p.longitude.toString();
+          print('Lat: ' + p.latitude.toString()); //print lat long
+          print('Lat: ' + p.longitude.toString());
+          String m = minutesElapsed.toInt().toString() +
+              ' minute has elapsed - Lat: ' +
+              p.latitude.toString() +
+              ', Lng: ' +
+              p.longitude.toString();
           setState(() {
             messages.add(Text(m)); // push log message into list
           });
 
           //Create a firestore reference and store coordinates on firebase with timestamp
-          CollectionReference locations = FirebaseFirestore.instance.collection('locations');
+          CollectionReference locations =
+              FirebaseFirestore.instance.collection('locations');
           await locations.add({
             'lat': p.latitude,
             'lng': p.longitude,
             'timestamp': DateTime.now().millisecondsSinceEpoch
           });
         }
-      });
+      }); */
     });
   }
 
@@ -120,7 +134,7 @@ class _TrackLocationState extends State<TrackLocation> {
   */
   void stop() {
     BackgroundLocation.stopLocationService();
-    timer.cancel();
+    //timer.cancel();
     print('stop tracking!');
   }
 }
